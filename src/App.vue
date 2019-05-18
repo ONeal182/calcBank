@@ -1,68 +1,23 @@
 <template>
-
     <div class="wrapper">
       <div class="calc">
         <div class="calc__leftSide">
           <div class="calc__leftSide__content" >
-              <div class="calc__leftSide__content__wrapper" @change="calcDep">
+              <div class="calc__leftSide__content__wrapper" @change="calcDep" >
                 <h2>Калькулятор доходности</h2>
                 <div class="calc__leftSide__content__wrapper__controls">
-                  <div class="calc__leftSide__content__wrapper__controls__control">
-                    <div class="calc__leftSide__content__wrapper__controls__control__title">
-                      <span class="nameInput">Сумма</span>
-                      <p>{{parseInt(inputValueMoney).toLocaleString()}} ₽</p>
-                    </div>
-                    <input type="range" name="" @input="colorMonye" class="myinput" id="myinput1" min="100000" step="10000" max="5000000" v-model="inputValueMoney"  >  
-                  </div> 
-                  <div class="calc__leftSide__content__wrapper__controls__control">
-                    <div class="calc__leftSide__content__wrapper__controls__control__title">
-                      <span class="nameInput">Срок</span>
-                      <p>{{parseInt(inputVaileData).toLocaleString()}} мес.</p>
-                    </div>
-                    <input type="range" name="" @input="colorData" class="myinput" id="myinput2"  min="6" max="60" step="6" v-model="inputVaileData">  
-                  </div> 
-                  <div class="calc__leftSide__content__wrapper__controls__radios">
-                    <div class="calc__leftSide__content__wrapper__controls__radios__radio" v-for="radio in radios" :key="radio.title">
-                      <input type="radio" name="rate" id="r1" :checked="radio.checked" :value="radio.persent"> <span>{{radio.title}}</span>
-                    </div>
-                    
-
-                  </div>
-                 
+                  <input-Money @localMoney="getMoney"></input-Money>
+                  <input-data @localData="getData"></input-data> 
+                  <input-Radio></input-Radio>
+                 </div>
               </div>
-              </div>
-              
-
-          </div>
+            </div>
         </div>
         <div class="calc__rightSide">
           <div class="calc__rightSide__content">
             <div class="calc__rightSide__content__st">
-                <div class="calc__rightSide__content__st__left">
-                  <h2 class="calcSum" style="width: 150px">+ {{SumNormal.toLocaleString()}} Р</h2>
-                  <span class="persent">6.5 % годовых</span>
-                  <div
-                    class="chart-cylinder chart-cylinder-green-shadow"
-                    id="normalMoney"
-                    style="z-index: 1; border-radius:50% / 23px ;"></div>
-                  <div
-                    class="chart-cylinder chart-cylinder-white-shadow depozit"
-                    style="height: 69px; margin-top: -35px; border-radius:50% / 23px ;"></div>
-                  <p style="text-align:center; padding-bottom:90px;" class="namePersent">Депозит <span class="namePersent__quest">?</span></p>
-                </div>
-                <div class="calc__rightSide__content__st__right">
-                  <h2 class="calcSum" style="width: 155px">+{{SumCity.toLocaleString()}} Р</h2>
-                  <span class="persent">25 % годовых</span>
-                  <div
-                    class="chart-cylinder chart-cylinder-green-shadow cityMoney"
-                    id="cityMoney"
-                    style="z-index: 1; border-radius:50%/23px ;"></div>
-                  <div
-                    class="chart-cylinder chart-cylinder-white-shadow"
-                    
-                    style="height: 69px; margin-top: -35px; border-radius: 50%/23px ; "></div>
-                  <p style="text-align:center; padding-bottom:90px;" class="namePersent">Город Денег</p>
-                </div>
+                <cylinder-Deposit></cylinder-Deposit>
+                <cylinder-City-Money></cylinder-City-Money>
             </div>
             <div class="calc__rightSide__content__button">
               <input type="button" value="Инвестировать">
@@ -73,67 +28,93 @@
     </div>
 </template>
 <script>
-
+import inputMoney from './components/inputMoney.vue'
+import inputData from './components/inputData.vue'
+import inputRadio from './components/radioButtons.vue'
+import cylinderDeposit from './components/deposit.vue'
+import cylinderCityMoney from './components/cityMoney.vue'
   export default {
-
+    
     data () {
       return{
         inputValueMoney: 2500000,
         inputVaileData: 30,
         SumCity: 0,
         SumNormal: 0,
-        radios: [
-            {title: 'Консервативный', persent: 0.08, checked: true},
-            {title: 'Сбалансированный', persent: 0.18, checked: false},
-            {title: 'Рискованный', persent: 0.25, checked: false},
-
-        ]
-      }
+        
+        }
       
     },
 
-    methods: {
-      colorMonye() {
-        let input = document.getElementById("myinput1") 
-        
-       return input.style.background = 'linear-gradient(to right, #4bd1a0 0%, #4bd1a0 '+((input.value)/50000) +'%, #f9f9f9' + ((input.value)/50000) + '%, #f9f9f9 100%)'
-      },
-       colorData() {
-        
-        let input = document.getElementById("myinput2");
-         
-        
-        return input.style.background = 'linear-gradient(to right, #4bd1a0 0%, #4bd1a0 '+((input.value)/0.54-10) +'%, #f9f9f9 ' + ((input.value)/0.54-10) + '%, #f9f9f9 100%)'
-          
+    components: {
+      inputMoney,
+      inputData,
+      inputRadio,
+      cylinderDeposit,
+      cylinderCityMoney
+    },
 
+    methods: {
+      getMoney(inputValueMoney){
+        this.inputValueMoney = inputValueMoney
+        
+        
+      },
+      getData(inputVaileData){
+        this.inputVaileData = inputVaileData
+        
+        
       },
       
       calcDep(){
         
-        let heightDiagramCity = document.getElementById('cityMoney');
-        let heightDiagramNormal = document.getElementById('normalMoney');
+        // const heightDiagramCity = document.getElementById('cityinputValueMoney');
         
+        // const heightDiagramNormal = document.getElementById('normalinputValueMoney');
+
+        const checkValue = document.querySelector('input[name="rate"]:checked').value;
+
+        this.SumCity =  (Math.round(this.inputValueMoney*Math.pow(1 + checkValue/12, this.inputVaileData) - this.inputValueMoney))
+
+        this.SumNormal =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney))
+        console.log(this.SumCity)
         
-         let checkValue = document.querySelector('input[name="rate"]:checked').value;
+
+        // this.calcheight(heightDiagramNormal, heightDiagramCity)
+
+        // this.calcFix(heightDiagramNormal, heightDiagramCity);
+
+        
+       
          
-         this.SumCity =  (Math.round(this.inputValueMoney*Math.pow(1 + checkValue/12, this.inputVaileData) - this.inputValueMoney))
-         this.SumNormal =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney))
-         heightDiagramCity.style.height = 140 +  Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
-         heightDiagramNormal.style.height = 140 -  Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
-         if (parseInt(heightDiagramNormal.style.height) < 40){
-           heightDiagramNormal.style.height = 40 + 'px';
-         }   
       },
+      // calcheight(normal, city){
+
+      //   city.style.height = 140 + Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
+
+      //   normal.style.height = 140 - Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
+        
+      // },
+      // calcFix(a,b){
       
-        chartHeight () {
-          
-        }
+      //   if (parseInt(a.style.height) < 45){
+
+      //   return a.style.height = parseInt(b.style.height) / 3 + 'px';
+
+      //    } 
+         
+      // }
       
       },
       created() {
-        
         this.SumCity =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.08/12, this.inputVaileData) - this.inputValueMoney).toLocaleString())
-        this.SumNormal=  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney).toLocaleString())
+
+        this.SumNormal =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney).toLocaleString())
+
+        
+        
+        
+        
       }
      
   }
