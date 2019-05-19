@@ -3,7 +3,7 @@
       <div class="calc">
         <div class="calc__leftSide">
           <div class="calc__leftSide__content" >
-              <div class="calc__leftSide__content__wrapper" @change="calcDep" >
+              <div class="calc__leftSide__content__wrapper"   @change="calcDep" >
                 <h2>Калькулятор доходности</h2>
                 <div class="calc__leftSide__content__wrapper__controls">
                   <input-Money @localMoney="getMoney"></input-Money>
@@ -16,8 +16,8 @@
         <div class="calc__rightSide">
           <div class="calc__rightSide__content">
             <div class="calc__rightSide__content__st">
-                <cylinder-Deposit></cylinder-Deposit>
-                <cylinder-City-Money></cylinder-City-Money>
+                <cylinder-Deposit :heightDiagramNormal="heightDiagramNormal" :SumNormal="SumNormal"></cylinder-Deposit>
+                <cylinder-City-Money :heightDiagramCity="heightDiagramCity" :SumCity="SumCity"></cylinder-City-Money>
             </div>
             <div class="calc__rightSide__content__button">
               <input type="button" value="Инвестировать">
@@ -41,6 +41,8 @@ import cylinderCityMoney from './components/cityMoney.vue'
         inputVaileData: 30,
         SumCity: 0,
         SumNormal: 0,
+        heightDiagramNormal: String,
+        heightDiagramCity: String,
         
         }
       
@@ -60,6 +62,7 @@ import cylinderCityMoney from './components/cityMoney.vue'
         
         
       },
+
       getData(inputVaileData){
         this.inputVaileData = inputVaileData
         
@@ -68,56 +71,30 @@ import cylinderCityMoney from './components/cityMoney.vue'
       
       calcDep(){
         
-        // const heightDiagramCity = document.getElementById('cityinputValueMoney');
+         const checkValue = document.querySelector('input[name="rate"]:checked').value;
+
+         this.SumCity =  (Math.round(this.inputValueMoney*Math.pow(1 + checkValue/12, this.inputVaileData) - this.inputValueMoney))
+
+         this.SumNormal =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney))
         
-        // const heightDiagramNormal = document.getElementById('normalinputValueMoney');
+         this.heightDiagramCity = 140 + Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
 
-        const checkValue = document.querySelector('input[name="rate"]:checked').value;
+         this.heightDiagramNormal = 140 - Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
+         
+         if (parseInt(this.heightDiagramNormal) < 45){
 
-        this.SumCity =  (Math.round(this.inputValueMoney*Math.pow(1 + checkValue/12, this.inputVaileData) - this.inputValueMoney))
+         return this.heightDiagramNormal = parseInt(this.heightDiagramCit) / 3 + 'px';
 
-        this.SumNormal =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney))
-        console.log(this.SumCity)
-        
-
-        // this.calcheight(heightDiagramNormal, heightDiagramCity)
-
-        // this.calcFix(heightDiagramNormal, heightDiagramCity);
-
-        
-       
+         } 
          
       },
-      // calcheight(normal, city){
-
-      //   city.style.height = 140 + Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
-
-      //   normal.style.height = 140 - Math.round(((100-parseInt(this.SumNormal)/parseInt(this.SumCity)*100)/2)*2.8) + 'px'
-        
-      // },
-      // calcFix(a,b){
-      
-      //   if (parseInt(a.style.height) < 45){
-
-      //   return a.style.height = parseInt(b.style.height) / 3 + 'px';
-
-      //    } 
-         
-      // }
-      
       },
       created() {
-        this.SumCity =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.08/12, this.inputVaileData) - this.inputValueMoney).toLocaleString())
+         this.SumCity =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.08/12, this.inputVaileData) - this.inputValueMoney).toLocaleString())
 
-        this.SumNormal =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney).toLocaleString())
-
-        
-        
-        
-        
+         this.SumNormal =  (Math.round(this.inputValueMoney*Math.pow(1 + 0.065/12, this.inputVaileData) - this.inputValueMoney).toLocaleString())
       }
-     
-  }
+   }
 
 </script>
 
